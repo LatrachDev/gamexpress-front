@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   Container, Typography, Box, Button, TextField,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  IconButton, Snackbar, Alert, CircularProgress, MenuItem
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, CircularProgress, MenuItem
 } from '@mui/material';
 import { Add, Edit, Delete, Close } from '@mui/icons-material';
 import api from '../../api/axios';
@@ -168,12 +167,12 @@ const Products = () => {
                   <td className="px-6 py-4">{product.stock}</td>
                   <td className="px-6 py-4">{product.category?.name || 'N/A'}</td>
                   <td className="px-6 py-4 text-right flex justify-end gap-2">
-                    <IconButton onClick={() => handleOpenDialog(product)} className="text-blue-600 hover:text-blue-800">
+                    <button onClick={() => handleOpenDialog(product)} className="text-blue-600 hover:text-blue-800">
                       <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => handleOpenDeleteDialog(product)} className="text-red-600 hover:text-red-800">
+                    </button>
+                    <button onClick={() => handleDelete(product)} className="text-red-600 hover:text-red-800">
                       <Delete />
-                    </IconButton>
+                    </button>
                   </td>
                 </tr>
               ))
@@ -188,13 +187,13 @@ const Products = () => {
 
       {/* Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>
+        <div className='p-5'>
           <span className="text-lg font-semibold">{isEditing ? 'Edit Product' : 'Add New Product'}</span>
-          <IconButton onClick={handleCloseDialog} sx={{ position: 'absolute', right: 8, top: 8 }}>
+          <button onClick={handleCloseDialog} sx={{ position: 'absolute', right: 8, top: 8 }}>
             <Close />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent className="space-y-4">
+          </button>
+        </div>
+        <DialogContent className="space-y-6">
           <TextField label="Name" name="name" fullWidth value={formData.name} onChange={handleInputChange} />
           <TextField label="Slug" name="slug" fullWidth value={formData.slug} onChange={handleInputChange} helperText="Auto-generated from name." />
           <TextField label="Price" name="price" fullWidth value={formData.price} onChange={handleInputChange} />
