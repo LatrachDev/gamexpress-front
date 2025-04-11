@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Unauthorized from './pages/Unauthorized';
 import Layout from './components/Layout';
+import Categories from './pages/categories/Categories';
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
             </Route>
             
             <Route element={<ProtectedRoute roles={['super_admin']} />}>
-              <Route path="categories" element={<div>Categories Management</div>} />
+              <Route path="categories" element={<Categories />} />
             </Route>
             
             <Route element={<ProtectedRoute roles={['product_manager', 'super_admin']} />}>
