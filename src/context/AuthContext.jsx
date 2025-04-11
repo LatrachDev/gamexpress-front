@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, use } from 'react';
 import api from '../api/axios';
 
 
@@ -13,14 +13,17 @@ export const AuthProvider = ({ children }) => {
   // Check  user  auth
   useEffect(() => {
     const checkAuth = async () => {
+      
       try {
         if (token) {
-          const { data } = await api.get('/user');
-          console.log(data);
+          const { data } = await api.get('user');
+          // console.log(data.user.name);
           setUser(data);
           setIsAuthenticated(true);
+         
         }
       } catch (err) {
+        console.log('FAAAAALSE');
         console.error('Authentication check failed:', err);
         logout();
       } finally {
@@ -43,9 +46,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const { data } = await api.post('/login', credentials);
-      
-      localStorage.setItem('token', data.token);
-      setToken(data.token);
+      console.log("token " , data.access_token);
+      localStorage.setItem('token', data.access_token);
+      setToken(data.access_token);
       setUser(data.user);
       setIsAuthenticated(true);
       return { success: true };

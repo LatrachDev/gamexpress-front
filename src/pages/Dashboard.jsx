@@ -2,18 +2,49 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Box, Typography, Container, Card, CardContent, Grid, CircularProgress } from '@mui/material';
 import { Dashboard as DashboardIcon, ShoppingCart, People, BarChart } from '@mui/icons-material';
+import api from '../api/axios';
+import Products from './Products';
 
 const Dashboard = () => {
-
   const [loading, setLoading] = useState(true);
+  const [statistics, setStatistics] = useState({
+    product_count: 0,
+    available_products: 0,
+    total_users: 0,
+  });
   const { user } = useAuth();
-  useEffect(() => {
-    // Simulate loading data
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+  console.log(user);
 
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    console.log("User data in Dashboard:", {
+      user,
+      hasRequiredRoles: user?.user?.roles?.some(role =>
+        ['product_manager', 'super_admin'].includes(role.name)
+      )
+    });
+  }, [user]);
+
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      setLoading(true);
+      try {
+        const { data } = await api.get('dashboard');
+        console.log(data);
+        
+        console.log('API Response:', data); // Log the API response
+        setStatistics({
+          product_count: data.product_count || 0,
+          available_products: data.available_products || 0,
+          total_users: data.total_users || 0,
+        });
+      } catch (error) {
+        console.error('Failed to fetch dashboard statistics:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStatistics();
   }, []);
 
   if (loading) {
@@ -23,6 +54,7 @@ const Dashboard = () => {
       </Box>
     );
   }
+  console.log("Total Products:", statistics.product_count);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -30,11 +62,11 @@ const Dashboard = () => {
         Dashboard
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
-        Welcome back, {user.user.name} {user.user.roles[0].name}
+        Welcome back, {user.user?.name} {user.roles[0]}
       </Typography>
 
       <Grid container spacing={3} sx={{ mt: 2 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card>
             <CardContent>
               <Box display="flex" justifyContent="space-between">
@@ -43,11 +75,24 @@ const Dashboard = () => {
                 </Typography>
                 <ShoppingCart color="primary" />
               </Box>
-              <Typography variant="h5">0</Typography>
+              <Typography variant="h5">{statistics.product_count}</Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
+          <Card>
+            <CardContent>
+              <Box display="flex" justifyContent="space-between">
+                <Typography color="textSecondary" gutterBottom>
+                  Available Products
+                </Typography>
+                <DashboardIcon color="primary" />
+              </Box>
+              <Typography variant="h5">{statistics.available_products}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
           <Card>
             <CardContent>
               <Box display="flex" justifyContent="space-between">
@@ -56,50 +101,11 @@ const Dashboard = () => {
                 </Typography>
                 <People color="primary" />
               </Box>
-              <Typography variant="h5">0</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between">
-                <Typography color="textSecondary" gutterBottom>
-                  Total Orders
-                </Typography>
-                <BarChart color="primary" />
-              </Box>
-              <Typography variant="h5">0</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between">
-                <Typography color="textSecondary" gutterBottom>
-                  Revenue
-                </Typography>
-                <DashboardIcon color="primary" />
-              </Box>
-              <Typography variant="h5">$0</Typography>
+              <Typography variant="h5">{statistics.total_users}</Typography>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
-
-      <Box sx={{ mt: 4 }}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Recent Activity
-            </Typography>
-            <Typography color="textSecondary">
-              No recent activity
-            </Typography>
-          </CardContent>
-        </Card>
-      </Box>
     </Container>
   );
 };
