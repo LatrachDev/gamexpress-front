@@ -95,10 +95,10 @@ const Categories = () => {
   const handleSubmit = async () => {
     try {
       if (isEditing) {
-        await api.put(`v1/admin/categories/${selectedCategory.id}`, formData);
+        await api.put(`categories/${selectedCategory.id}`, formData);
         showSnackbar('Category updated successfully');
       } else {
-        await api.post('v1/admin/categories', formData);
+        await api.post('categories', formData);
         showSnackbar('Category created successfully');
       }
       handleCloseDialog();
@@ -114,7 +114,8 @@ const Categories = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`v1/admin/categories/${selectedCategory.id}`);
+      await api.delete(`categories/${selectedCategory.id}`);
+      console.log(selectedCategory.id);
       showSnackbar('Category deleted successfully');
       handleCloseDeleteDialog();
       fetchCategories();
