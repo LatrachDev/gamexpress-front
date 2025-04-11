@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Box, Typography, Container, Card, CardContent, Grid, CircularProgress } from '@mui/material';
 import { Dashboard as DashboardIcon, ShoppingCart, People, BarChart } from '@mui/icons-material';
 import api from '../api/axios';
-import Products from './Products';
+import Products from '../pages/products/Products';
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
