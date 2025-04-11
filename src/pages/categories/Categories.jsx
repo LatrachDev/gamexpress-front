@@ -137,71 +137,78 @@ const Categories = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4" component="h1">
-          Categories
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<Add />}
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">📂 Categories</h1>
+        <button
           onClick={() => handleOpenDialog()}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl shadow transition duration-200"
         >
-          Add Category
-        </Button>
-      </Box>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Slug</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+          <Add className="text-white" />
+          <span>Add Category</span>
+        </button>
+      </div>
+  
+      <div className="bg-white shadow-md rounded-xl overflow-hidden">
+        <table className="min-w-full text-sm">
+          <thead className="bg-gray-100 text-gray-600 text-left uppercase text-xs">
+            <tr>
+              <th className="px-6 py-4">ID</th>
+              <th className="px-6 py-4">Name</th>
+              <th className="px-6 py-4">Slug</th>
+              <th className="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {categories.length > 0 ? (
               categories.map((category) => (
-                <TableRow key={category.id}>
-                  <TableCell>{category.id}</TableCell>
-                  <TableCell>{category.name}</TableCell>
-                  <TableCell>{category.slug}</TableCell>
-                  <TableCell align="right">
-                    <IconButton 
-                      color="primary" 
+                <tr
+                  key={category.id}
+                  className=" hover:bg-gray-50 transition"
+                >
+                  <td className="px-6 py-4">{category.id}</td>
+                  <td className="px-6 py-4 font-medium text-gray-800">
+                    {category.name}
+                  </td>
+                  <td className="px-6 py-4 text-gray-600">{category.slug}</td>
+                  <td className="px-6 py-4 text-right flex justify-end gap-2">
+                    <IconButton
                       onClick={() => handleOpenDialog(category)}
                       aria-label="edit"
+                      className="text-blue-600 hover:text-blue-800"
                     >
                       <Edit />
                     </IconButton>
-                    <IconButton 
-                      color="error" 
+                    <IconButton
                       onClick={() => handleOpenDeleteDialog(category)}
                       aria-label="delete"
+                      className="text-red-600 hover:text-red-800"
                     >
                       <Delete />
                     </IconButton>
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               ))
             ) : (
-              <TableRow>
-                <TableCell colSpan={4} align="center">
-                  No categories found
-                </TableCell>
-              </TableRow>
+              <tr>
+                <td
+                  colSpan={4}
+                  className="px-6 py-6 text-center text-gray-500"
+                >
+                  No categories found.
+                </td>
+              </tr>
             )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Add/Edit Category Dialog */}
+          </tbody>
+        </table>
+      </div>
+  
+      {/* Add/Edit Category Dialog (MUI with slight visual tweaks) */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
         <DialogTitle>
-          {isEditing ? 'Edit Category' : 'Add New Category'}
+          <span className="text-lg font-semibold">
+            {isEditing ? 'Edit Category' : 'Add New Category'}
+          </span>
           <IconButton
             aria-label="close"
             onClick={handleCloseDialog}
@@ -210,7 +217,7 @@ const Categories = () => {
             <Close />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent className="space-y-4">
           <TextField
             autoFocus
             margin="dense"
@@ -221,7 +228,6 @@ const Categories = () => {
             variant="outlined"
             value={formData.name}
             onChange={handleInputChange}
-            sx={{ mb: 2, mt: 1 }}
           />
           <TextField
             margin="dense"
@@ -232,14 +238,14 @@ const Categories = () => {
             variant="outlined"
             value={formData.slug}
             onChange={handleInputChange}
-            helperText="The slug is used in URLs and should contain only lowercase letters, numbers, and hyphens"
+            helperText="Used in URLs. Only lowercase letters, numbers, and hyphens."
           />
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
+        <DialogActions className="px-6 pb-4">
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button 
-            onClick={handleSubmit} 
-            variant="contained" 
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
             color="primary"
             disabled={!formData.name || !formData.slug}
           >
@@ -247,16 +253,13 @@ const Categories = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
+  
       {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={openDeleteDialog}
-        onClose={handleCloseDeleteDialog}
-      >
-        <DialogTitle>Confirm Delete</DialogTitle>
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete the category "{selectedCategory?.name}"? 
+            Are you sure you want to delete the category "{selectedCategory?.name}"?
             This action cannot be undone.
           </DialogContentText>
         </DialogContent>
@@ -267,24 +270,26 @@ const Categories = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Snackbar for notifications */}
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={6000} 
+  
+      {/* Snackbar Notification */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleSnackbarClose} 
-          severity={snackbar.severity} 
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
           sx={{ width: '100%' }}
         >
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Container>
+    </div>
   );
+  
+  
 };
 
 export default Categories;
