@@ -14,11 +14,17 @@ const Layout = () => {
           </Typography>
           {isAuthenticated ? (
             <>
-              {user?.roles?.includes('admin') || user?.roles?.includes('product_manager') ? (
+              {user?.roles?.includes('super_admin') || user?.roles?.includes('product_manager') ? (
                 <Button color="inherit" component={Link} to="/dashboard">
                   Dashboard
                 </Button>
               ) : null}
+              <Button color="inherit" component={Link} to="/products">
+                Products
+              </Button>
+              <Button color="inherit" component={Link} to="/categories">
+                Categories
+              </Button>
               <Button color="inherit" onClick={logout}>
                 Logout
               </Button>
