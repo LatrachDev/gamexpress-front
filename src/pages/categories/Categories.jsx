@@ -173,20 +173,20 @@ const Categories = () => {
                   </td>
                   <td className="px-6 py-4 text-gray-600">{category.slug}</td>
                   <td className="px-6 py-4 text-right flex justify-end gap-2">
-                    <IconButton
+                    <button
                       onClick={() => handleOpenDialog(category)}
                       aria-label="edit"
                       className="text-blue-600 hover:text-blue-800"
                     >
                       <Edit />
-                    </IconButton>
-                    <IconButton
+                    </button>
+                    <button
                       onClick={() => handleOpenDeleteDialog(category)}
                       aria-label="delete"
                       className="text-red-600 hover:text-red-800"
                     >
                       <Delete />
-                    </IconButton>
+                    </button>
                   </td>
                 </tr>
               ))

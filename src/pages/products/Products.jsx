@@ -28,6 +28,7 @@ const Products = () => {
     setLoading(true);
     try {
       const response = await api.get('products');
+      console.log(response.data);
       setProducts(response.data.products || []);
     } catch (error) {
       showSnackbar('Failed to load products', 'error');
@@ -79,6 +80,7 @@ const Products = () => {
   };
 
   const handleFileChange = (e) => {
+    console.log('Files selected:', e.target.files);
     setFormData(prev => ({ ...prev, image: e.target.files }));
   };
 
@@ -90,12 +92,18 @@ const Products = () => {
     const data = new FormData();
     Object.keys(formData).forEach(key => {
       if (key === 'image') {
-        Array.from(formData.image).forEach(file => data.append('image[]', file));
+        Array.from(formData.image).forEach(file => data.append('images[]', file));
+        console.log('Files appended:', formData.image);
       } else {
         data.append(key, formData[key]);
       }
     });
 
+    // debuging..
+    for (let pair of data.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]);
+    }
+    // end debuging..
     try {
       if (isEditing) {
         await api.post(`products/${selectedProduct.id}?_method=PUT`, data);

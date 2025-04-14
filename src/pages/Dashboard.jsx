@@ -62,7 +62,7 @@ const Dashboard = () => {
         Dashboard
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
-        Welcome back, {user.user?.name} {user.roles[0]}
+        Welcome back, <span className='font-bold'>{user.user?.name}</span>, your are a <span className='font-bold'>{user.roles[0]}</span> 
       </Typography>
 
       <Grid container spacing={3} sx={{ mt: 2 }}>
